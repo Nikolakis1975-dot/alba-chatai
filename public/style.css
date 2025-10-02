@@ -1,0 +1,910 @@
+/* CHAT SCREEN - DESIGN I RI */
+#chat-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: #ffffff;
+}
+
+/* HEADER I RI - I BARDHË */
+header {
+  background: #ffffff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+header button {
+  padding: 8px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #5f6368;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+header button:hover { 
+  background: #f8f9fa;
+  border-color: #dadce0;
+}
+
+/* PROFILI */
+#user-profile {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4285f4;
+}
+
+#profile-name {
+  font-weight: 600;
+  color: #202124;
+  font-size: 16px;
+}
+
+/* CHAT AREA - DESIGN I RI */
+#chat {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.message-wrapper { 
+  display: flex; 
+  flex-direction: column;
+  margin-bottom: 8px;
+  animation: fadeIn 0.3s ease-out;
+  max-width: 80%;
+}
+
+.message-wrapper.user { 
+  align-items: flex-end;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.message-wrapper.bot { 
+  align-items: flex-start;
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.message {
+  padding: 16px 20px;
+  border-radius: 20px;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  position: relative;
+}
+
+.user-message {
+  background: #4285f4;
+  color: #ffffff;
+  border-bottom-right-radius: 6px;
+  margin-left: 60px;
+}
+
+.bot-message {
+  background: #f1f3f4;
+  color: #202124;
+  border-bottom-left-radius: 6px;
+  margin-right: 60px;
+}
+
+.timestamp {
+  font-size: 11px;
+  color: #70757a;
+  margin-top: 6px;
+  padding: 0 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.feedback {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.feedback button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.feedback button:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* INPUT AREA - DESIGN I RI */
+#input-area {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#user-input {
+  flex: 1;
+  padding: 16px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 28px;
+  outline: none;
+  background: #ffffff;
+  color: #202124;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+#user-input:focus {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+}
+
+#send-btn {
+  background: #4285f4;
+  border: none;
+  padding: 16px;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#send-btn:hover { 
+  background: #357ae8;
+  transform: scale(1.05);
+}
+
+#emoji-btn {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 50%;
+  margin-right: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+#emoji-btn:hover {
+  background: #f8f9fa;
+  border-color: #dadce0;
+}
+
+#emoji-panel {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+}
+
+#emoji-panel.hidden { 
+  display: none; 
+}
+
+#emoji-panel span {
+  cursor: pointer;
+  font-size: 22px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+#emoji-panel span:hover {
+  background: #f8f9fa;
+  transform: scale(1.2);
+}
+
+/* STILI I KODEVE - PËRSHITATJE PËR BACKGROUND TË BARDHË */
+.code-block {
+  position: relative;
+  margin: 12px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1E1E1E !important;
+  border: 1px solid #3E3E3E;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.code-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.code-actions button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.code-actions button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+pre {
+  margin: 0;
+  padding: 24px;
+  background: #1E1E1E !important;
+  border-radius: 0 0 12px 12px;
+  overflow-x: auto;
+}
+
+pre code {
+  font-family: 'Fira Code', 'Monaco', 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #D4D4D4;
+}
+
+/* PËRSHTATJE PËR EKRANET E MEDHA */
+@media (min-width: 1400px) {
+  #chat, #input-area {
+    max-width: 1400px;
+  }
+  
+  .message-wrapper {
+    max-width: 70%;
+  }
+}
+
+/* PËRSHTATJE PËR EKRANET E VOJGLA */
+@media (max-width: 768px) {
+  #chat, #input-area {
+    padding: 15px;
+  }
+  
+  .message-wrapper {
+    max-width: 90%;
+  }
+  
+  .user-message {
+    margin-left: 20px;
+  }
+  
+  .bot-message {
+    margin-right: 20px;
+  }
+  
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 15px;
+  }
+  
+  #user-profile {
+    margin-right: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  header button {
+    margin-bottom: 5px;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .message {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  
+  #user-input {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+  
+  #send-btn {
+    padding: 14px;
+    min-width: 45px;
+    height: 45px;
+  }
+  
+  #emoji-btn {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  #emoji-panel {
+    grid-template-columns: repeat(5, 1fr);
+    padding: 10px;
+    gap: 5px;
+  }
+  
+  #emoji-panel span {
+    font-size: 20px;
+    padding: 5px;
+  }
+}
+
+/* ANIMACIONET */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.message-wrapper.user {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.message-wrapper.bot {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+/* SCROLLBAR STYLING */
+#chat::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#chat::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+#chat::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* BUTONI I FSHIJES SE HISTORISE */
+#clear-history {
+  background: #ffffff;
+  color: #ea4335;
+  border-color: #ea4335;
+}
+
+#clear-history:hover {
+  background: #fce8e6;
+  color: #d93025;
+  border-color: #d93025;
+}
+
+/* BUTONI I EKSPORTIT */
+#download-history {
+  background: #ffffff;
+  color: #34a853;
+  border-color: #34a853;
+}
+
+#download-history:hover {
+  background: #e6f4ea;
+  color: #1e8e3e;
+  border-color: #1e8e3e;
+}
+
+/* BUTONI I IMPORTIT */
+#upload-history {
+  background: #ffffff;
+  color: #fbbc04;
+  border-color: #fbbc04;
+}
+
+#upload-history:hover {
+  background: #fff8e1;
+  color: #f29900;
+  border-color: #f29900;
+}
+
+/* BUTONI I FOTOS */
+#change-photo {
+  background: #ffffff;
+  color: #4285f4;
+  border-color: #4285f4;
+}
+
+#change-photo:hover {
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-color: #1a73e8;
+}
+
+/* BUTONI I DALJES */
+header button:last-child {
+  background: #ffffff;
+  color: #5f6368;
+  border-color: #5f6368;
+}
+
+header button:last-child:hover {
+  background: #f8f9fa;
+  color: #202124;
+  border-color: #202124;
+}
+
+/* ==================== LOGIN SCREEN - DESIGN I RI I THJESHTË ==================== */
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+  padding: 20px;
+}
+
+.login-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #e0e0e0;
+}
+
+.login-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.login-header h1 {
+  color: #202124;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.login-header p {
+  color: #5f6368;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  color: #202124;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.form-group input {
+  padding: 16px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  color: #202124;
+}
+
+.form-group input:focus {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+  outline: none;
+}
+
+.form-group input:hover {
+  border-color: #a8a8a8;
+}
+
+.login-btn {
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login-btn:hover {
+  background: #3b78e7;
+  box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+}
+
+.login-btn:active {
+  background: #3367d6;
+  transform: translateY(1px);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 28px 0;
+  color: #dadce0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dadce0;
+}
+
+.divider span {
+  padding: 0 16px;
+  color: #5f6368;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.register-section {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid #e8eaed;
+}
+
+.register-section h2 {
+  color: #202124;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-upload label {
+  color: #202124;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.file-input {
+  padding: 16px;
+  border: 1px dashed #dadce0;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.file-input:hover {
+  border-color: #4285f4;
+  background: #f8f9fa;
+}
+
+.file-input input {
+  display: none;
+}
+
+.file-input span {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.file-input span:hover {
+  color: #4285f4;
+}
+
+#debug-info {
+  margin-top: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #5f6368;
+  font-size: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #e8eaed;
+}
+
+/* Animacione të reja */
+@keyframes subtleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-container {
+  animation: subtleFadeIn 0.4s ease-out;
+}
+
+/* Efekte fokusi të përmirësuara */
+.form-group input:focus {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.15);
+}
+
+/* Butoni i regjistrimit në hover */
+.login-btn.register {
+  background: #34a853;
+}
+
+.login-btn.register:hover {
+  background: #2e8b47;
+  box-shadow: 0 2px 6px rgba(52, 168, 83, 0.3);
+}
+
+/* Përshtatje për mobile */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px 24px;
+    margin: 0 16px;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  #login-screen {
+    padding: 16px;
+    background: #ffffff;
+  }
+  
+  .login-header h1 {
+    font-size: 24px;
+  }
+  
+  .form-group input {
+    padding: 14px;
+  }
+  
+  .login-btn {
+    padding: 14px;
+  }
+  
+  .file-input {
+    padding: 14px;
+  }
+}
+
+/* Efekte të holla hover për inputet */
+.form-group input {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading state për butonin */
+.login-btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.login-btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Vendosja e ikonave në inpute (opsionale) */
+.form-group {
+  position: relative;
+}
+
+.form-group input {
+  padding-left: 16px;
+}
+
+/* Butoni i regjistrimit me ngjyrë të ndryshme */
+.register-form .login-btn {
+  background: #34a853;
+}
+
+.register-form .login-btn:hover {
+  background: #2e8b47;
+}
+
+/* Stilet për efektin e shkrimit në kohë reale */
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f3f4;
+  padding: 12px 16px;
+  border-radius: 18px;
+  margin: 5px 0;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #5f6368;
+  border-radius: 50%;
+  margin: 0 2px;
+  animation: typingAnimation 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingAnimation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* Përmirësimi i përshtatshmërisë për mobile */
+@media (max-width: 768px) {
+  .typing-dot {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+/* Animacion i dridhjes për inputet e gabuara */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.form-group input.shake {
+  animation: shake 0.5s;
+  border-color: #ea4335;
+}
+
+/* Butoni loading */
+.login-btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.login-btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
