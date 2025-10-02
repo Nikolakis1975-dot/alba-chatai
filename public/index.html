@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatAI ALBA - Version i Ri me Server</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    /* Stili për modalin e API Key */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 80%;
+      max-width: 500px;
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    .api-key-form {
+      margin-top: 20px;
+    }
+    
+    .api-key-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    .api-key-form .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .api-key-form button {
+      flex: 1;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .api-key-form button.save-btn {
+      background-color: #4285f4;
+    }
+    
+    .api-key-form button.save-btn:hover {
+      background-color: #3367d6;
+    }
+    
+    .api-key-form button.delete-btn {
+      background-color: #ea4335;
+    }
+    
+    .api-key-form button.delete-btn:hover {
+      background-color: #d33426;
+    }
+    
+    .api-status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    
+    .api-status.valid {
+      background-color: #e6f4ea;
+      color: #137333;
+    }
+    
+    .api-status.invalid {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+
+    /* Stili për formularin e ri të regjistrimit me email */
+    .email-input-group {
+      margin-bottom: 15px;
+    }
+
+    .email-input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .email-input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .email-input-group input:focus {
+      border-color: #4285f4;
+      outline: none;
+    }
+
+    .verification-info {
+      background: #e8f4fd;
+      border: 1px solid #b3e0ff;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+
+    .verification-info h4 {
+      margin: 0 0 8px 0;
+      color: #0066cc;
+    }
+
+    /* Stili për butonin e verifikimit */
+    #verify-email-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      transition: transform 0.2s;
+    }
+
+    #verify-email-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    #verify-email-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login & Register - DESIGN I RI -->
+  <div id="login-screen">
+    <div class="login-container">
+      <div class="login-header">
+        <h1>🤖 ChatAI ALBA</h1>
+        <p>Identifikohu për të hyrë në sistem</p>
+      </div>
+
+      <!-- FORMULARI I LOGIN-IT -->
+      <div class="login-form">
+        <h3>Hyr në Llogari</h3>
+        <div class="form-group">
+          <label for="username">Përdoruesi</label>
+          <input type="text" id="username" placeholder="Shkruaj emrin tënd" value="">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Fjalëkalimi</label>
+          <input type="password" id="password" placeholder="Shkruaj fjalëkalimin">
+        </div>
+
+        <button class="login-btn" onclick="login()">Hyr</button>
+      </div>
+
+      <div class="divider">
+        <span>OSE</span>
+      </div>
+
+      <!-- FORMULARI I RI I REGJISTRIMIT ME EMAIL -->
+      <div class="register-section">
+        <h2>Krijo Llogari të Re</h2>
+        
+        <div class="verification-info">
+          <h4>📧 Verifikim Email</h4>
+          <p>Pas regjistrimit, do të dërgoni një email verifikimi për të aktivizuar llogarinë tuaj.</p>
+        </div>
+        
+        <div class="register-form">
+          <div class="email-input-group">
+            <label for="reg-username">Emri i Përdoruesit</label>
+            <input type="text" id="reg-username" placeholder="Zgjidh një emër përdoruesi" required>
+          </div>
+
+          <div class="email-input-group">
+            <label for="reg-email">Adresa e Email-it</label>
+            <input type="email" id="reg-email" placeholder="shkruaj-email@shembull.com" required>
+          </div>
+
+          <div class="email-input-group">
+            <label for="reg-password">Fjalëkalimi</label>
+            <input type="password" id="reg-password" placeholder="Krijoni një fjalëkalim të fortë" required>
+          </div>
+
+          <div class="email-input-group">
+            <label for="reg-confirm-password">Konfirmo Fjalëkalimin</label>
+            <input type="password" id="reg-confirm-password" placeholder="Rishkruaj fjalëkalimin" required>
+          </div>
+
+          <div class="file-upload">
+            <label for="new-photo">Foto profili (opsionale)</label>
+            <label class="file-input">
+              <input type="file" id="new-photo" accept="image/*">
+              <span>Kliko për të ngarkuar foto</span>
+            </label>
+          </div>
+
+          <button class="login-btn" onclick="registerWithEmail()">📧 Regjistrohu me Email</button>
+          <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
+            Duke u regjistruar, ju pranoni <a href="#">kushtet e përdorimit</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="debug-info"></div>
+  </div>
+
+  <!-- CHAT INTERFACE -->
+  <div id="chat-screen" style="display: none;">
+    <header>
+      <div id="user-profile">
+        <img id="profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234285f4'%3E%3Cpath d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="Foto profili">
+        <span id="profile-name"></span>
+      </div>
+      
+      <!-- BUTONAT E MENAXHIMIT -->
+      <button id="verify-email-btn" onclick="verifyEmail()">📧 Verifiko Email</button>
+      <button id="change-photo">🖼️ Ndrysho Foto</button>
+      <button id="api-key-btn">🔑 API Key</button>
+      <button id="download-history">📥 Shkarko</button>
+      <button id="upload-history">📤 Ngarko</button>
+      <button id="clear-history">🗑️ Fshi</button>
+      <button onclick="logout()">🚪 Dil</button>
+    </header>
+    
+    <main id="chat"></main>
+
+    <footer id="input-area">
+      <button id="emoji-btn">😊</button>
+      <div id="emoji-panel" class="hidden">
+        <span>😀</span><span>😂</span><span>😍</span><span>🔥</span><span>😎</span>
+        <span>🤔</span><span>😢</span><span>❤️</span><span>👍</span><span>👎</span>
+      </div>
+      <input type="text" id="user-input" placeholder="Shkruaj mesazhin...">
+      <button id="send-btn">➤</button>
+    </footer>
+  </div>
+
+  <!-- Modal për API Key -->
+  <div id="api-key-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Konfigurimi i API Key</h2>
+      <p>Vendos API Key për Gemini për të aktivizuar funksionalitetin e plotë të chatbotit.</p>
+      
+      <div class="api-key-form">
+        <input type="password" id="api-key-input" placeholder="Vendos API Key tënde këtu">
+        
+        <div class="button-group">
+          <button class="save-btn" onclick="saveApiKeyToServer()">💾 Ruaj në Server</button>
+          <button class="delete-btn" onclick="deleteApiKeyFromServer()">🗑️ Fshi nga Serveri</button>
+        </div>
+      </div>
+      
+      <div id="api-key-status" class="api-status"></div>
+      
+      <p><small>Nuk ke API Key? Vizito <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> për të krijuar një.</small></p>
+      <p><small><strong>API Key ruhet i sigurt në server dhe enkriptuar!</strong></small></p>
+    </div>
+  </div>
+
+  <!-- Modal për Verifikim Email-i -->
+  <div id="email-verification-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>📧 Verifikim Email-i</h2>
+      
+      <div id="verification-content">
+        <p id="verification-message">Po dërgohet email-i i verifikimit...</p>
+        <div class="button-group">
+          <button class="save-btn" onclick="resendVerificationEmail()">🔄 Ridërgo Email</button>
+          <button class="delete-btn" onclick="closeVerificationModal()">Mbyll</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // ==================== SISTEMI I RI I VERIFIKIMIT EMAIL ====================
+
+    // Funksioni për regjistrim me email
+    async function registerWithEmail() {
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      // Validimi
+      if (!username || !email || !password || !confirmPassword) {
+        alert('❌ Ju lutem plotësoni të gjitha fushat!');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('❌ Fjalëkalimet nuk përputhen!');
+        return;
+      }
+
+      if (password.length < 6) {
+        alert('❌ Fjalëkalimi duhet të jetë së paku 6 karaktere!');
+        return;
+      }
+
+      try {
+        // Shfaq loading
+        const registerBtn = document.querySelector('.login-btn');
+        registerBtn.textContent = '🔄 Po regjistrohet...';
+        registerBtn.disabled = true;
+
+        const response = await fetch('/api/email/register-with-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            username: username, 
+            email: email, 
+            password: password 
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert('✅ ' + data.message + '\n\nKontrollo email-in për linkun e verifikimit!');
+          // Pastro formularin
+          document.getElementById('reg-username').value = '';
+          document.getElementById('reg-email').value = '';
+          document.getElementById('reg-password').value = '';
+          document.getElementById('reg-confirm-password').value = '';
+        } else {
+          alert('❌ ' + data.message);
+        }
+      } catch (error) {
+        console.error('Gabim në regjistrim:', error);
+        alert('❌ Problem me serverin. Provo përsëri më vonë.');
+      } finally {
+        // Rikthe butonin
+        const registerBtn = document.querySelector('.login-btn');
+        registerBtn.textContent = '📧 Regjistrohu me Email';
+        registerBtn.disabled = false;
+      }
+    }
+
+    // Funksioni për verifikim email (butoni në header)
+    async function verifyEmail() {
+      try {
+        const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        if (!user.email) {
+          alert('❌ Përdoruesi nuk ka email të regjistruar.');
+          return;
+        }
+
+        if (user.is_verified) {
+          alert('✅ Email-i juaj është tashmë i verifikuar!');
+          return;
+        }
+
+        // Shfaq modal
+        document.getElementById('email-verification-modal').style.display = 'block';
+        document.getElementById('verification-message').textContent = 'Po dërgohet email-i i verifikimit...';
+
+        const response = await fetch('/api/email/resend-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: user.email })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          document.getElementById('verification-message').textContent = '✅ ' + data.message;
+        } else {
+          document.getElementById('verification-message').textContent = '❌ ' + data.message;
+        }
+      } catch (error) {
+        console.error('Gabim në verifikim:', error);
+        document.getElementById('verification-message').textContent = '❌ Problem me serverin. Provo përsëri më vonë.';
+      }
+    }
+
+    // Funksioni për ridërgim email-i
+    async function resendVerificationEmail() {
+      try {
+        const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        document.getElementById('verification-message').textContent = '🔄 Po dërgohet email-i...';
+
+        const response = await fetch('/api/email/resend-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: user.email })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          document.getElementById('verification-message').textContent = '✅ ' + data.message;
+        } else {
+          document.getElementById('verification-message').textContent = '❌ ' + data.message;
+        }
+      } catch (error) {
+        console.error('Gabim në ridërgim:', error);
+        document.getElementById('verification-message').textContent = '❌ Problem me serverin.';
+      }
+    }
+
+    // Funksioni për mbylljen e modalit
+    function closeVerificationModal() {
+      document.getElementById('email-verification-modal').style.display = 'none';
+    }
+
+    // ==================== INICIALIZIMI ====================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal për verifikim email
+      const verificationModal = document.getElementById('email-verification-modal');
+      const verificationClose = verificationModal.querySelector('.close');
+      
+      verificationClose.onclick = function() {
+        verificationModal.style.display = 'none';
+      }
+      
+      window.onclick = function(event) {
+        if (event.target == verificationModal) {
+          verificationModal.style.display = 'none';
+        }
+      }
+
+      // Modal për API Key (ekzistues)
+      const apiModal = document.getElementById('api-key-modal');
+      const apiBtn = document.getElementById('api-key-btn');
+      const apiClose = apiModal.querySelector('.close');
+      
+      // ✅ ZËVENDËSOJE PLOTËSISHT KËTË PJESË:
+apiBtn.onclick = async function() {
+    apiModal.style.display = 'block';
+    
+    // Pastro input-in dhe shfaq loading
+    document.getElementById('api-key-input').value = "";
+    document.getElementById('api-key-status').textContent = "🔄 Po kontrollohet statusi...";
+    document.getElementById('api-key-status').className = "api-status";
+    
+    // Kontrollo statusin e API Key DIREKT NGA SERVERI
+    await updateApiKeyStatus();
+};
+      
+      apiClose.onclick = function() {
+        apiModal.style.display = 'none';
+      }
+    });
+
+ // ✅ FUNKSION I KORRIGJUAR PËR RUAJTJE API KEY
+async function saveApiKeyToServer() {
+    try {
+        const apiKey = document.getElementById('api-key-input').value.trim();
+        
+        if (!apiKey) {
+            document.getElementById('api-key-status').textContent = "❌ Ju lutem vendosni një API Key valid.";
+            document.getElementById('api-key-status').className = "api-status invalid";
+            return;
+        }
+
+        // Shfaq loading
+        document.getElementById('api-key-status').textContent = "🔄 Po ruhet në server...";
+        document.getElementById('api-key-status').className = "api-status";
+
+        // ✅ URL I KORRIGJUAR: /api/api-keys/save (JO /api/api-keys/api-keys/save)
+        const response = await fetch('/api/api-keys/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                apiKey: apiKey,
+                serviceName: 'gemini'
+            })
+        });
+
+        const data = await response.json();
+        console.log('📥 Përgjigja nga serveri:', data);
+
+        if (data.success) {
+            document.getElementById('api-key-status').textContent = "✅ " + data.message;
+            document.getElementById('api-key-status').className = "api-status valid";
+            
+            // Mbylle modalin pas 2 sekondash
+            setTimeout(() => {
+                document.getElementById('api-key-modal').style.display = 'none';
+            }, 2000);
+            
+        } else {
+            document.getElementById('api-key-status').textContent = "❌ " + data.message;
+            document.getElementById('api-key-status').className = "api-status invalid";
+        }
+
+    } catch (error) {
+        console.error('❌ Gabim në ruajtjen e API Key:', error);
+        document.getElementById('api-key-status').textContent = "❌ Problem me serverin. Provo përsëri.";
+        document.getElementById('api-key-status').className = "api-status invalid";
+    }
+}
+
+// ✅ FUNKSION I KORRIGJUAR PËR FSHIRJE API KEY
+async function deleteApiKeyFromServer() {
+    try {
+        document.getElementById('api-key-status').textContent = "🔄 Po fshihet nga serveri...";
+        document.getElementById('api-key-status').className = "api-status";
+
+        // ✅ URL I KORRIGJUAR: /api/api-keys/delete
+        const response = await fetch('/api/api-keys/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                serviceName: 'gemini'
+            })
+        });
+
+        const data = await response.json();
+        console.log('📥 Përgjigja e fshirjes:', data);
+
+        if (data.success) {
+            document.getElementById('api-key-input').value = "";
+            document.getElementById('api-key-status').textContent = "✅ " + data.message;
+            document.getElementById('api-key-status').className = "api-status valid";
+            
+        } else {
+            document.getElementById('api-key-status').textContent = "❌ " + data.message;
+            document.getElementById('api-key-status').className = "api-status invalid";
+        }
+
+    } catch (error) {
+        console.error('❌ Gabim në fshirjen e API Key:', error);
+        document.getElementById('api-key-status').textContent = "❌ Problem me serverin.";
+        document.getElementById('api-key-status').className = "api-status invalid";
+    }
+}
+
+// ✅ FUNKSION I KORRIGJUAR PËR STATUSIN E API KEY
+async function updateApiKeyStatus() {
+    const statusElement = document.getElementById('api-key-status');
+    
+    try {
+        // ✅ URL I KORRIGJUAR: /api/api-keys/status/gemini
+        const response = await fetch('/api/api-keys/status/gemini', {
+            credentials: 'include'
+        });
+
+        console.log('🔍 Status response:', response.status);
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('📊 Status data:', data);
+            
+            if (data.success && data.hasApiKey) {
+                statusElement.textContent = "✅ API Key është i konfiguruar në server";
+                statusElement.className = "api-status valid";
+                document.getElementById('api-key-input').value = "••••••••••••••••";
+            } else {
+                statusElement.textContent = "❌ Nuk ka API Key të konfiguruar. Chatboti nuk do të funksionojë plotësisht.";
+                statusElement.className = "api-status invalid";
+                document.getElementById('api-key-input').value = "";
+            }
+        } else {
+            statusElement.textContent = "❌ Gabim në kontrollimin e statusit (HTTP " + response.status + ")";
+            statusElement.className = "api-status invalid";
+            console.error('❌ Status check failed:', response.status);
+        }
+    } catch (error) {
+        console.error('❌ Gabim në kontrollimin e statusit:', error);
+        statusElement.textContent = "❌ Problem me serverin: " + error.message;
+        statusElement.className = "api-status invalid";
+    }
+}
+
+// ✅ FUNKSION I KORRIGJUAR PËR MARRJE API KEY PËR CHATBOT
+async function getApiKeyFromServer() {
+    try {
+        // ✅ URL I KORRIGJUAR: /api/api-keys/get/gemini
+        const response = await fetch('/api/api-keys/get/gemini', {
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('🔑 API Key nga serveri:', data);
+            if (data.success && data.apiKey) {
+                return data.apiKey;
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('❌ Gabim në marrjen e API Key:', error);
+        return null;
+    }
+}
+// ✅ FUNKSION I RI PËR STATUSIN E API KEY (PA LOCALSTORAGE)
+async function updateApiKeyStatus() {
+    const statusElement = document.getElementById('api-key-status');
+    
+    try {
+        const response = await fetch('/api/api-keys/status/gemini', {
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            
+            if (data.success && data.hasApiKey) {
+                // Nëse kemi API Key në server, trego status pozitiv
+                statusElement.textContent = "✅ API Key është i konfiguruar në server";
+                statusElement.className = "api-status valid";
+                
+                // Mund të vendosim vetëm placeholder në input
+                document.getElementById('api-key-input').value = "••••••••••••••••";
+                
+            } else {
+                statusElement.textContent = "❌ Nuk ka API Key të konfiguruar. Chatboti nuk do të funksionojë plotësisht.";
+                statusElement.className = "api-status invalid";
+                document.getElementById('api-key-input').value = "";
+            }
+        } else {
+            statusElement.textContent = "❌ Gabim në kontrollimin e statusit";
+            statusElement.className = "api-status invalid";
+        }
+    } catch (error) {
+        console.error('Gabim në kontrollimin e statusit:', error);
+        statusElement.textContent = "❌ Problem me serverin";
+        statusElement.className = "api-status invalid";
+    }
+} </script>
+</body>
+</html>
