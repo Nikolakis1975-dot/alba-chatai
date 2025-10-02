@@ -1,0 +1,25 @@
+# Databaza lokale
+data/
+*.db
+
+# Të dhëna sensitive
+.env
+
+# Varësitë e Node.js
+node_modules/
+
+# Skedarët e sistemit
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Konfigurime të Capacitor (për mobile)
+capacitor.config.*
+android/
+ios/
+
+# IDE files
+.vscode/
+.idea/
